@@ -24,7 +24,8 @@ class UsersController extends Controller {
 
         $validator = $request->validated();
 
-       if ( !$validator ) {
+       if (!$validator) {
+
             return response()->json($validator->errors(), 422);
         } 
 
@@ -44,84 +45,130 @@ class UsersController extends Controller {
          event(new UserRegistered($user));
 
         return response()->json([
+            'success' => true,
             'message' => 'User registered successfully',
             'user' => $user
         ], 201);
-
-       
+    
     }
 
     public function login(LoginRequest $request){
 
     	$validator = $request->validated();
          
-        if ( !$validator ) {
+        if (!$validator) {
+
             return response()->json($validator->errors(), 422);
         }
 
         $input = $request->only('email', 'password');
         $token = null;
 
+        try {
+            
         if (!$token = JWTAuth::attempt($input)) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid email or password'
+                'message' => 'Invalid email or password.'
             ], 401);
+          } 
+
+       }catch(Tymon\JWTAuth\Exceptions\JWTExceptions $e){
+
+            return response()->json([
+              'success' => false,
+              'message' => 'Sorry, the token could not be set.'
+          ], 500);
         }
-        return response()->json([
-            'message' => 'Login successful',
-            'token_type' => 'Bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'token' => $token,
-            'user' => auth()->user()      
-        ]);
- }
+          return $this->createNewToken($token); 
+     }
+
+    public function refresh() {
+
+      $refresh =  $this->createNewToken(auth()->refresh());
+
+         if(!$refresh) {
+
+            return response()->json([
+            'success' => false,
+            'message' => 'Sorry, the token could not be refreshed'
+            ]);
+         }
+         return $refresh;
+    }
 
     public function logout() {
 
-        auth()->logout();
+      auth()->logout();
 
-        return response()->json(['message' => 'User successfully signed out']);
+      return response()->json([
+          'success' => true,
+          'message' => 'User logged out successfully.'
+      ]);
+        
+    } 
+
+    protected function createNewToken($token) {
+
+        return response()->json([
+            'message' => 'Login successful',
+            'token_type' => 'Bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60000, //Get Time to Live (TTL)
+            'access_token' => $token,
+            'user' => auth()->user()      
+        ]);
+    }
+
+    public function profile() {
+
+        $user = auth()->user();
+
+        if (!$user) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, the user was not found.'
+            ], 400);    
+        }
+        return $user;
     }
 
     public function show($id) {
 
         $user = auth()->user()->find($id);
 
-        if ( !$user ) {
+        if (!$user) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, user with id ' .$id. ' was not found.'
-                
-            ], 400);
+                'message' => 'Sorry, the user with id ' .$id. ' was not found.'    
+            ],400);
         }
-
         return $user;
-
-    }
+     }
 
     public function update(Request $request, $id) {
 
         $user = auth()->user()->find($id);
 
-        if ( !$user ) {
+        if (!$user) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, user with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the user with id ' .$id. ' was not found.'
 
             ], 400);
         }
 
         $updated = $user->fill($request->all())->save();
             
-        if ( $updated ) {
+        if ($updated) {
     
             return response()->json([
                 'success' => true,
-                'message' => 'User updated successfully'
+                'message' => 'User updated successfully',
+                'user' => $user
             ]);
     
         } else {
@@ -131,22 +178,23 @@ class UsersController extends Controller {
                 'message' => 'Sorry, user could not be updated'
             ], 500);
         }
-
     }
 
     public function destroy($id) {
 
         $user = auth()->user()->find($id);
 
-        if ( !$user ) {
+        if (!$user) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, user with id of ' .$id. ' was not found.'
+                'message' => 'Sorry, the user with id ' .$id. ' was not found.'
             ], 400);
         }
 
-        if ( $user->delete()) {
+        $deleted = $user->delete();
+
+        if ($deleted) {
 
             return response()->json([
                 'success' => true,
@@ -156,7 +204,7 @@ class UsersController extends Controller {
     
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, user could not be deleted'
+                'message' => 'Sorry, the user could not be deleted'
                   ], 500);
             }
       }

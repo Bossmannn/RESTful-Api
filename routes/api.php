@@ -18,15 +18,19 @@ use App\Http\Controllers\AssetsAssignmentController;
 |
 */
 
+//Auth::routes();
+
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'auth'
+    'prefix' => 'v1'
     
 ], function ($router) {
     //User Routes
     Route::post('/login', [UsersController::class, 'login'])->name('api.login');
     Route::post('/register', [UsersController::class, 'register'])->name('api.register');
+    Route::post('/refresh', [UsersController::class, 'refresh'])->name('api.refresh');
     Route::post('/logout', [UsersController::class, 'logout'])->name('api.logout');
+    Route::get('/profile', [UsersController::class, 'profile'])->name('user.profile');
     Route::get('/show/{id}', [UsersController::class, 'show'])->name('api.show');  
     Route::post('/update/{id}', [UsersController::class, 'update'])->name('api.update');  
     Route::delete('/destroy/{id}', [UsersController::class, 'destroy'])->name('api.delete');    

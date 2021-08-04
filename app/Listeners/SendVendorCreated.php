@@ -13,12 +13,12 @@ class SendVendorCreated
         
         //
     }
-
+        //Event handler function
     public function handle(VendorCreated $event) {
 
-        $data = array('first_name' => $event->user->first_name, 'last_name' => $event->user->last_name,
+        $data = ['first_name' => $event->user->first_name, 'last_name' => $event->user->last_name,
         
-        'email' => $event->user->email, 'body' => 'Your vendor creation was successful.');
+        'email' => $event->user->email, 'body' => 'Your vendor creation was successful.'];
 
         Mail::send('emails.mail', $data, function($message) use ($data) {
 

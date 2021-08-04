@@ -10,6 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use JWTAuth;
+
 class AssetAssignmentCreated {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;

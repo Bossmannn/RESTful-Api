@@ -29,6 +29,11 @@ class VendorsController extends Controller {
 
       $validator = $request->validated();
 
+      if (!$validator) {
+          
+          return response()->json($validator->errors(), 422);
+      }
+
       $vendor = new Vendor();
       $vendor->name = $request->name;
       $vendor->category = $request->category;
@@ -54,44 +59,42 @@ class VendorsController extends Controller {
 
      $vendor = $this->user->vendors()->find($id);
 
-        if ( !$vendor ) {
-
+        if (!$vendor) {
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, vendor with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the vendor with id ' .$id. ' was not found.'
             ], 400);
         }
-
         return $vendor;
-
    }
 
    public function update(Request $request, $id) {
 
     $vendor = $this->user->vendors()->find($id);
 
-    if ( !$vendor ) {
+    if (!$vendor) {
 
         return response()->json([
             'success' => false,
-            'message' => 'Sorry, vendor with id ' .$id. ' was not found.'
+            'message' => 'Sorry, the vendor with id ' .$id. ' was not found.'
         ], 400);
     }
 
     $updated = $vendor->fill($request->all())->save();
             
-    if ( $updated ) {
+    if ($updated) {
 
         return response()->json([
             'success' => true,
-            'message' => 'Vendor updated successfully.'
+            'message' => 'Vendor updated successfully.',
+            'vendor' => $vendor
         ]);
 
     } else {
 
         return response()->json([
             'success' => false,
-            'message' => 'Sorry, vendor could not be updated'
+            'message' => 'Sorry, vendor could not be updated',
         ], 500);
     }
 
@@ -101,25 +104,27 @@ class VendorsController extends Controller {
 
     $vendor = $this->user->vendors()->find($id);
 
-    if ( !$vendor ) {
+    if (!$vendor) {
 
         return response()->json([
             'success' => false,
-            'message' => 'Sorry, vendor with id ' .$id. ' was not found.'
+            'message' => 'Sorry, the vendor with id ' .$id. ' was not found.'
         ], 400);
     }
 
-    if ( $vendor->delete()) {
+    $deleted = $vendor->delete();
+
+    if ($deleted) {
 
         return response()->json([
             'success' => true,
-            'message' => 'Vendor deleted successfully.'
+            'message' => 'Vendor deleted successfully.',
         ]);
     } else {
 
         return response()->json([
             'success' => false,
-            'message' => 'Sorry, vendor could not be deleted'
+            'message' => 'Sorry, the vendor could not be deleted'
               ], 500);
          }
     }  

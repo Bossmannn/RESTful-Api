@@ -31,6 +31,10 @@ class AssetsAssignmentController extends Controller {
 
         $validator = $request->validated();
 
+        if(!$validator) {
+            return response()->json($validator->errors(), 422);
+        }
+
         $assetassignment =  new AssetAssignment();
         $assetassignment->asset_id = $request->asset_id;
         $assetassignment->assignment_date = $request->assignment_date;
@@ -39,7 +43,7 @@ class AssetsAssignmentController extends Controller {
         $assetassignment->due_date = $request->due_date;
         $assetassignment->assigned_by = $request->assigned_by;
 
-         //Call Assigned Asset Event...
+         //Invoke Assigned Asset Event...
          event(new AssetAssignmentCreated($assetassignment));
 
         if ($this->user->assets_assignment()->save($assetassignment))
@@ -50,7 +54,7 @@ class AssetsAssignmentController extends Controller {
         else 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, assigned asset cannot be added.'
+                'message' => 'Sorry, assigned asset could not be added.'
          ]);
     }
 
@@ -58,11 +62,11 @@ class AssetsAssignmentController extends Controller {
 
         $assetassignment = $this->user->assets_assignment()->find($id);
 
-        if ( !$assetassignment ) {
+        if (!$assetassignment) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, assigned asset with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the assigned asset with id ' .$id. ' was not found.'
             ], 400);
         }
 
@@ -74,20 +78,22 @@ class AssetsAssignmentController extends Controller {
 
         $assetassignment = $this->user->assets_assignment()->find($id);
 
-        if ( !$assetassignment ) {
+        if (!$assetassignment) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, assigned asset with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the assigned asset with id ' .$id. ' was not found.'
             ], 400);
         }
 
         $updated = $assetassignment->fill($request->all())->save();
                 
-        if ( $updated ) {
+        if ($updated) {
 
             return response()->json([
                 'success' => true,
+                'message' => 'Assigned asset updated successfully.',
+                'asset assignment' => $assetassignment
             ]);
 
         } else {
@@ -103,24 +109,27 @@ class AssetsAssignmentController extends Controller {
 
         $assetassignment = $this->user->assets_assignment()->find($id);
 
-        if ( !$assetassignment ) {
+        if (!$assetassignment) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, assigned asset with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the assigned asset with id ' .$id. ' was not found.'
             ], 400);
         }
 
-        if ( $assetassignment->delete()) {
+        $deleted= $assetassignment->delete();
+
+        if ($deleted) {
 
             return response()->json([
-                'success' => true
+                'success' => true,
+                'message' => 'Assigned asset deleted successfully.'
             ]);
         } else {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, assigned asset could not be deleted.'
+                'message' => 'Sorry, the assigned asset could not be deleted.'
             ], 500);
         }
     }   

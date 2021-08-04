@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUsersTable extends Migration
 {
     
-    public function up()
-    {
+    public function up() {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
@@ -18,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone_no');
             $table->string('picture_url');
-            $table->boolean('is_disabled')->default( false );
+            $table->boolean('is_disabled')->default(false);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
@@ -26,8 +25,9 @@ class CreateUsersTable extends Migration
     }
 
    
-    public function down()
-    {
+    public function down(){
+
         Schema::dropIfExists('users');
+        
     }
 }

@@ -14,12 +14,12 @@ class SendWelcomeEmail {
         //
         
     }
-
+      //Event handler function
     public function handle(UserRegistered $event) {
 
-        $data = array('first_name' => $event->user->first_name, 'last_name' => $event->user->last_name,
+        $data = ['first_name' => $event->user->first_name, 'last_name' => $event->user->last_name,
         
-        'email' => $event->user->email, 'body' => 'Welcome, Thank you for your registration.');
+       'email' => $event->user->email, 'body' => 'Welcome, Thank you for your registration.'];
 
         Mail::send('emails.mail', $data, function($message) use ($data) {
 

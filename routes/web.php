@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CookiesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/cookie/set', [CookiesController::class, 'setCookie'])->name('cookies.set');
+Route::get('/cookie/get', [CookiesController::class, 'getCookie'])->name('cookies.get');

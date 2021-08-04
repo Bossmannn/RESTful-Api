@@ -32,6 +32,11 @@ class AssetsController extends Controller
      public function store(AssetRequest $request) {
 
         $validator = $request->validated();
+
+        if (!$validator) {
+            
+            return response()->json($validator->errors(), 422);
+        }
         
         $asset = new Asset();
         $asset->type = $request->type;
@@ -68,11 +73,11 @@ class AssetsController extends Controller
 
         $asset = $this->user->assets()->find($id);
 
-        if ( !$asset ) {
+        if (!$asset) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, asset with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the asset with id ' .$id. ' was not found.'
             ], 400);
         }
 
@@ -84,21 +89,22 @@ class AssetsController extends Controller
 
         $asset = $this->user->assets()->find($id);
 
-        if ( !$asset ) {
+        if (!$asset) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, asset with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the asset with id ' .$id. ' was not found.'
             ], 400);
         }
 
         $updated = $asset->fill($request->all())->save();
                 
-        if ( $updated ) {
+        if ($updated) {
 
             return response()->json([
                 'success' => true,
-                'message' => 'Asset updated successfully.'
+                'message' => 'Asset updated successfully.',
+                'asset' => $asset
             ]);
 
         } else {
@@ -114,15 +120,17 @@ class AssetsController extends Controller
 
         $asset = $this->user->assets()->find($id);
 
-        if ( !$asset ) {
+        if (!$asset) {
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, asset with id ' .$id. ' was not found.'
+                'message' => 'Sorry, the asset with id ' .$id. ' was not found.'
             ], 400);
         }
 
-        if ($asset->delete()) {
+        $deleted = $asset->delete();
+
+        if ($deleted) {
 
             return response()->json([
                 'success' => true, 
@@ -132,7 +140,7 @@ class AssetsController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, asset could not be deleted'
+                'message' => 'Sorry, the asset could not be deleted'
             ], 500);
         }
     } 
