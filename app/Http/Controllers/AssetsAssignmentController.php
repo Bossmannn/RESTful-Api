@@ -11,20 +11,9 @@ class AssetsAssignmentController extends Controller {
 
     protected $user;
 
-    public function __construct(){
-
-        $this->user = JWTAuth::parseToken()->authenticate();
-
-    }
-
     public function index() {
 
-        return $this->user
-                  ->assets_assignment()
-                  ->get(['asset_id', 'user_id', 'assignment_date', 
-
-                  'status', 'is_due', 'due_date', 'assigned_by'])
-                  ->toArray();
+        return AssetAssignment::all();
     }
 
     public function store(AssetAssignmentRequest $request) {
@@ -60,7 +49,7 @@ class AssetsAssignmentController extends Controller {
 
     public function show($id) {
 
-        $assetassignment = $this->user->assets_assignment()->find($id);
+        $assetassignment = AssetAssignment::find($id);
 
         if (!$assetassignment) {
 
@@ -76,7 +65,7 @@ class AssetsAssignmentController extends Controller {
 
     public function update(Request $request, $id) {
 
-        $assetassignment = $this->user->assets_assignment()->find($id);
+        $assetassignment = AssetAssignment::find($id);
 
         if (!$assetassignment) {
 
@@ -107,7 +96,7 @@ class AssetsAssignmentController extends Controller {
 
     public function destroy($id) {
 
-        $assetassignment = $this->user->assets_assignment()->find($id);
+        $assetassignment = AssetAssignment::find($id);
 
         if (!$assetassignment) {
 

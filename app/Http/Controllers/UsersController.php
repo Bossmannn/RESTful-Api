@@ -86,16 +86,8 @@ class UsersController extends Controller {
 
     public function refresh() {
 
-      $refresh =  $this->createNewToken(auth()->refresh());
-
-         if(!$refresh) {
-
-            return response()->json([
-            'success' => false,
-            'message' => 'Sorry, the token could not be refreshed'
-            ]);
-         }
-         return $refresh;
+        return $this->createNewToken(auth()->refresh());
+        
     }
 
     public function logout() {

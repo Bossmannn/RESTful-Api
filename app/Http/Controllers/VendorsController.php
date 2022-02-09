@@ -12,18 +12,11 @@ class VendorsController extends Controller {
 
     protected $user;
 
-    public function __construct() {
-
-        $this->user = JWTAuth::parseToken()->authenticate();
-
-    }
-
    public function index() {
 
-      return $this->user->vendors()
-                        ->get(['user_id','name', 'category'])
-                        ->toArray();
-           }
+      return Vendor::all();
+                        
+        }
 
    public function store(VendorRequest $request) {
 
@@ -57,7 +50,7 @@ class VendorsController extends Controller {
 
    public function show($id) {
 
-     $vendor = $this->user->vendors()->find($id);
+     $vendor = Vendor::find($id);
 
         if (!$vendor) {
             return response()->json([
@@ -70,7 +63,7 @@ class VendorsController extends Controller {
 
    public function update(Request $request, $id) {
 
-    $vendor = $this->user->vendors()->find($id);
+    $vendor = Vendor::find($id);
 
     if (!$vendor) {
 
@@ -102,7 +95,7 @@ class VendorsController extends Controller {
 
    public function destroy($id) {
 
-    $vendor = $this->user->vendors()->find($id);
+    $vendor = Vendor::find($id);
 
     if (!$vendor) {
 

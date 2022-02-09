@@ -12,22 +12,11 @@ class AssetsController extends Controller
 {
     protected $user;
 
-    public function __construct() {
-
-        $this->user = JWTAuth::parseToken()->authenticate();
-
-    }
-
     public function index() {
 
-        return $this->user->assets()
-                          ->get(['type', 'serial_no', 'description', 'fixed_or_movable',
-    
-                          'picture_path', 'purchase_date', 'start_use_date', 'purchase_price', 'warranty_expiry_date', 'degradation_in_years',
-                
-                          'current_value', 'location'])
-                          ->toArray();
-            }
+        return Asset::all();
+
+        }
   
      public function store(AssetRequest $request) {
 
@@ -71,7 +60,7 @@ class AssetsController extends Controller
   
      public function show($id) {
 
-        $asset = $this->user->assets()->find($id);
+        $asset = Asset::find($id);
 
         if (!$asset) {
 
@@ -87,7 +76,7 @@ class AssetsController extends Controller
   
      public function update(Request $request, $id) {
 
-        $asset = $this->user->assets()->find($id);
+        $asset = Asset::find($id);
 
         if (!$asset) {
 
@@ -118,7 +107,7 @@ class AssetsController extends Controller
   
      public function destroy() {
 
-        $asset = $this->user->assets()->find($id);
+        $asset = Asset::find($id);
 
         if (!$asset) {
 

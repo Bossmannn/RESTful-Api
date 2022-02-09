@@ -13,9 +13,11 @@ class VendorRequest extends FormRequest
     }
 
     public function rules() {
+
         return [
+
             'name' => 'required',
-            'category' => 'required'   
+            'category' => 'required'
         ];
     }
 }

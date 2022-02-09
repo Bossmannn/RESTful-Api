@@ -32,28 +32,28 @@ Route::group([
     Route::post('/logout', [UsersController::class, 'logout'])->name('api.logout');
     Route::get('/profile', [UsersController::class, 'profile'])->name('user.profile');
     Route::get('/show/{id}', [UsersController::class, 'show'])->name('api.show');  
-    Route::post('/update/{id}', [UsersController::class, 'update'])->name('api.update');  
+    Route::put('/update/{id}', [UsersController::class, 'update'])->name('api.update');  
     Route::delete('/destroy/{id}', [UsersController::class, 'destroy'])->name('api.delete');    
 
     //Vendor Routes
-    Route::get('/vendor-index', [VendorsController::class, 'index'])->name('vendor.index');
-    Route::get('/vendor-show/{id}', [VendorsController::class, 'show'])->name('vendor.show');
-    Route::post('/vendor-store', [VendorsController::class, 'store'])->name('vendor.create');
-    Route::post('/vendor-update/{id}', [VendorsController::class, 'update'])->name('vendor.update');
-    Route::delete('/vendor-destroy/{id}', [VendorsController::class, 'destroy'])->name('vendor.destroy');
+    Route::get('/vendor', [VendorsController::class, 'index'])->name('vendor.index');
+    Route::get('/vendor/{id}', [VendorsController::class, 'show'])->name('vendor.show');
+    Route::post('/vendor', [VendorsController::class, 'store'])->name('vendor.create');
+    Route::put('/vendor/{id}', [VendorsController::class, 'update'])->name('vendor.update');
+    Route::delete('/vendor/{id}', [VendorsController::class, 'destroy'])->name('vendor.destroy');
 
     //Asset Routes
-    Route::get('/asset-index', [AssetsController::class, 'index'])->name('asset.index');
-    Route::get('/asset-show/{id}', [AssetsController::class, 'show'])->name('asset.show');
-    Route::post('/asset-store', [AssetsController::class, 'store'])->name('asset.create');
-    Route::post('/asset-update/{id}', [AssetsController::class, 'update'])->name('asset.update');
-    Route::delete('/asset-destroy/{id}', [AssetsController::class, 'destroy'])->name('asset.destroy');
+    Route::get('/assets', [AssetsController::class, 'index'])->name('asset.index');
+    Route::get('/assets/{id}', [AssetsController::class, 'show'])->name('asset.show');
+    Route::post('/assets', [AssetsController::class, 'store'])->name('asset.create');
+    Route::put('/assets/{id}', [AssetsController::class, 'update'])->name('asset.update');
+    Route::delete('/assets/{id}', [AssetsController::class, 'destroy'])->name('asset.destroy');
 
     //Asset Assignment Routes
-    Route::get('/assignment-index', [AssetsAssignmentController::class, 'index'])->name('assignment.index');
-    Route::get('/assignment-show/{id}', [AssetsAssignmentController::class, 'show'])->name('assignment.show');
-    Route::post('/assignment-store', [AssetsAssignmentController::class, 'store'])->name('assignment.create');
-    Route::post('/assignment-update/{id}', [AssetsAssignmentController::class, 'update'])->name('assignment.update');
-    Route::delete('/assignment-destroy/{id}', [AssetsAssignmentController::class, 'destroy'])->name('assignment.destroy');
+    Route::get('/assignment', [AssetsAssignmentController::class, 'index'])->name('assignment.index');
+    Route::get('/assignment/{id}', [AssetsAssignmentController::class, 'show'])->name('assignment.show');
+    Route::post('/assignment', [AssetsAssignmentController::class, 'store'])->name('assignment.create');
+    Route::put('/assignment/{id}', [AssetsAssignmentController::class, 'update'])->name('assignment.update');
+    Route::delete('/assignment/{id}', [AssetsAssignmentController::class, 'destroy'])->name('assignment.destroy');
     
 });
